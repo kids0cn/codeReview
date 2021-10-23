@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>MySQL学习笔记</title>
+		<link rel="stylesheet" type="text/css" href="../css/basic.css"/>
+		<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="aside">
+			<div id="nav_list">
+				<ul>
+					<li><a href='../mysql.html' target="_top">MySQL简介</a></li>
+					<li><a href='a.html' target="_top">MySQL基本操作</a></li>
+					<li><a href='b.html' target="_top">MySQL常用数据类型</a></li>
+					<li><a href='c.html' target="_top">MySQL键值约束</a></li>
+					<li class='on'><a href='d.html' target="_top">MySQL数据表设计</a></li>
+					<li><a href='e.html' target="_top">SQL查询练习</a></li>
+					<li><a href='f.html' target="_top">SQL的四种连接查询</a></li>
+					<li><a href='g.html' target="_top">事务</a></li>	
+				</ul>
+			</div>
+		</div>
+		<div id="main">
+			<div class="next">
+				<a href="c.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="e.html">下一章节</a>
+			</div>
+			<div id="section">
+				<h2>数据表设计</h2>
+				<h3>一、第一范示1NF</h3>
+				<p>数据表中所有字段都是不可分割的原子值。<br>
+					如：地址：中国云南省大理市xxx    <br>
+					按照1NF应该分为：    <br>
+					国家    省份    城市    详细地址 <br>
+					中国  云南省  大理市  xxx
+				</p>
+				<h3>二、第二范式2NF</h3>
+				<p>必须满足1NF的前提下，第二范示要求除主键外的每一列必须完全依赖于主键。</p>
+				<pre>
+	CREATE TABLE myorder(
+		product_id int,
+		customer_id int,
+		product_name varchar(20),
+		customer_name varchar(20),
+		primary key(product_id,customer_id)
+	);
+	如上述表中除主键外，其他列只依赖于主键的部分字段，为满足范式2，必须拆表，如下：
+
+	CREATE TABLE myorder(
+		order_id int primary key,
+		product_id int,
+		customer_id int
+	);
+	CREATE TABLE product(
+		product_id int primary key,
+		name varchar(20)
+	);
+	CREATE TABLE customer(
+		customer_id int primary key,
+		name varchar(20)
+	);
+				</pre>
+				<h3>三、第三范式3NF</h3>
+				<p>必须满足第二范式的基础上，除主键列的其他列之间不能有传递依赖关系。</p>
+				<pre>
+例如范式2中：
+	CREATE TABLE myorder(
+		order_id int primary key,
+		product_id int,
+		customer_id int,
+		customer_phone varchar(15) --此列由于依赖customer_id,而customer_id依赖于order_id。这样就违背第三范式。  
+	);
+				</pre>
+			</div>
+			<div class="next">
+				<a href="c.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="e.html">下一章节</a>
+			</div>
+		</div>
+		<div id="fix" title="回到顶部" onclick='goTop()' style="display: none;">
+			<img src="../img/top.png">
+		</div>
+	</body>
+</html>

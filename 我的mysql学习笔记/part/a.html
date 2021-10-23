@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>MySQL学习笔记</title>
+		<link rel="stylesheet" type="text/css" href="../css/basic.css"/>
+		<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="aside">
+			<div id="nav_list">
+				<ul>
+					<li><a href='../mysql.html' target="_top">MySQL简介</a></li>
+					<li class='on'><a href='a.html' target="_top">MySQL基本操作</a></li>
+					<li><a href='b.html' target="_top">MySQL常用数据类型</a></li>
+					<li><a href='c.html' target="_top">MySQL键值约束</a></li>
+					<li><a href='d.html' target="_top">MySQL数据表设计</a></li>
+					<li><a href='e.html' target="_top">SQL查询练习</a></li>
+					<li><a href='f.html' target="_top">SQL的四种连接查询</a></li>
+					<li><a href='g.html' target="_top">事务</a></li>	
+				</ul>
+			</div>
+		</div>
+		<div id="main">
+			<div class="next">
+				<a href="../mysql.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="b.html">下一章节</a>
+			</div>
+			<div id="section">
+				<h2>MySQL基本操作</h2>
+				<hr >
+				<pre>
+数据库登录：
+
+	mysql -u root -p
+	Enter password: *********
+
+修改密码：
+
+	alter user 'root' @ 'localhost' identified by "new_password";
+
+修改表名：
+
+	rename table 表名 to 新表名;
+
+修改列名：
+
+	alter table 表名 change 列名 新列名 数值类型;
+
+显示数据库与选择数据库：
+
+	show databases；
+	use databaseName;
+
+退出数据库：
+
+	exit；
+
+创建数据库：
+
+	create database test；
+
+查看数据库中的表：
+
+	show tables;	
+				</pre>
+				<h2>创建数据表</h2>
+				<p>例：创建数据库test，并在test数据库中创建pet表，并在表中增加数据</p>
+				<pre>
+创建数据库test：
+	mysql> create database test;
+	Query OK, 1 row affected (0.55 sec)
+
+	mysql> use test
+	Database changed
+	mysql> CREATE TABLE pet(
+		->         name VARCHAR(20),
+		->         owner VARCHAR(20),
+		->         species VARCHAR(20),
+		->         sex CHAR(1),
+		->         birth DATE,
+		->         death DATE);
+	Query OK, 0 rows affected (2.19 sec)
+
+	mysql> insert into pet values('Puffball','Diane','hamster','公','1999-03-30',NULL);
+	Query OK, 1 row affected (0.69 sec)	
+
+查看数据表结构：
+	mysql> describe pet;
+	+---------+-------------+------+-----+---------+-------+
+	| Field   | Type        | Null | Key | Default | Extra |
+	+---------+-------------+------+-----+---------+-------+
+	| name    | varchar(20) | YES  |     | NULL    |       |
+	| owner   | varchar(20) | YES  |     | NULL    |       |
+	| species | varchar(20) | YES  |     | NULL    |       |
+	| sex     | char(1)     | YES  |     | NULL    |       |
+	| birth   | date        | YES  |     | NULL    |       |
+	| death   | date        | YES  |     | NULL    |       |
+	+---------+-------------+------+-----+---------+-------+
+	6 rows in set (0.22 sec)
+
+查看表中的记录：	
+	mysql> select * from pet;
+	+----------+-------+---------+------+------------+-------+
+	| name     | owner | species | sex  | birth      | death |
+	+----------+-------+---------+------+------------+-------+
+	| Puffball | Diane | hamster | 公   | 1999-03-30 | NULL  |
+	+----------+-------+---------+------+------------+-------+
+	1 row in set (0.00 sec)
+	
+修改数据：
+	mysql>update pet set name='旺旺' where owner='Diane';
+	mysql> select * from pet;                           
+	+--------+-------+---------+------+------------+-------+
+	| name   | owner | species | sex  | birth      | death |
+	+--------+-------+---------+------+------------+-------+
+	| 旺旺   | Diane | hamster | 公    | 1999-03-30 | NULL  |
+	+--------+-------+---------+------+------------+-------+
+	1 row in set (0.00 sec)
+	
+删除数据：
+	mysql>delete from pet where name='旺旺';
+				</pre>
+			</div>
+			<div class="next">
+				<a href="../mysql.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="b.html">下一章节</a>
+			</div>
+		</div>
+		<div id="fix" title="回到顶部" onclick='goTop()' style="display: none;">
+			<img src="../img/top.png">
+		</div>
+	</body>
+</html>

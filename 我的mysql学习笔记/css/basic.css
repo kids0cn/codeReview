@@ -1,0 +1,84 @@
+a:hover{
+	color: brown;
+}
+a{
+	color:purple;
+}
+#logo{
+	float:left;
+	width:100px;
+	height:100px;
+	
+}
+#nav_list ul{
+	width:90% ;
+	padding-left: 10px;
+}
+#nav_list li a{
+	padding-left: 5px ;
+	text-decoration: none;
+	color: black;
+	font-size: 0.8em;
+	
+}
+#nav_list li{
+	list-style: none;
+	background-color:oldlace ;
+	border: 1px solid white;
+	text-align: left;	
+}
+#nav_list li:hover{
+	font-weight: bold;
+}
+#nav_list .on,#nav_list .on a{
+	background-color: darkseagreen;
+	color: white;
+}
+#aside{
+	display: inline-block;
+	width:150px;
+	vertical-align: top;
+	border: 1px solid lightgray;
+}
+#main{
+	display: inline-block;
+	width:60%;
+	border: 1px solid lightgray;
+	text-align: justify;
+	padding: 20px;
+}
+pre{
+	border: 2px solid brown;
+	background-color: darkslategrey;
+	color: white;
+	font-size: 1.2em;
+	white-space: pre-wrap;
+}
+.next{
+	border: 1px solid dimgray;
+	background-color:darkgrey;
+	height: 40px;
+	line-height: 40px;
+	text-align: right;
+	padding-right: 20px ;
+}
+.next a{
+	text-decoration: none;
+}
+#fix{
+	width:50px;
+	height:50px;
+	background-color:lightgray;
+	position:fixed;
+	top:80%;
+	left:90%;
+	z-index:999;
+	border-radius:25%;
+	text-align: center;
+	line-height: 50px;
+	cursor: pointer;
+}
+
+#fix:hover{
+	background-color: darkgray;
+}

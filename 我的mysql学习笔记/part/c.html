@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>MySQL学习笔记</title>
+		<link rel="stylesheet" type="text/css" href="../css/basic.css"/>
+		<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="aside">
+			<div id="nav_list">
+				<ul>
+					<li><a href='../mysql.html' target="_top">MySQL简介</a></li>
+					<li><a href='a.html' target="_top">MySQL基本操作</a></li>
+					<li><a href='b.html' target="_top">MySQL常用数据类型</a></li>
+					<li class='on'><a href='c.html' target="_top">MySQL键值约束</a></li>
+					<li><a href='d.html' target="_top">MySQL数据表设计</a></li>
+					<li><a href='e.html' target="_top">SQL查询练习</a></li>
+					<li><a href='f.html' target="_top">SQL的四种连接查询</a></li>
+					<li><a href='g.html' target="_top">事务</a></li>	
+				</ul>
+			</div>
+		</div>
+		<div id="main">
+			<div class="next">
+				<a href="b.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="d.html">下一章节</a>
+			</div>
+			<div id="section">
+				<h2>键值约束</h2>
+				<h3>一、主键约束(primary key)</h3>
+				<p>能够唯一确定一张表中的一条记录，也就是我们通过给某个字段增加约束，就可以使得该字段不重复且不为空；</p>
+				<pre>
+创建表user，并指定id为主键：
+	
+	mysql> CREATE TABLE user(
+    -> id int primary key,
+    -> name varchar(20)
+    -> );
+	Query OK, 0 rows affected (2.03 sec)
+	
+插入数据：
+	mysql> insert into user values(1,'张三');
+	Query OK, 1 row affected (0.49 sec)
+	
+此时由于主键约束，再插入id相同的值就会失败：	
+	mysql> insert into user values(1,'李四');
+	ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+	
+				</pre>
+				<h3>联合主键</h3>
+				<pre>
+创建表user2，并将id和name都设为主键（联合主键）：
+
+	CREATE TABLE user2(
+	id int,
+	name varchar(20),
+	password varchar(20),
+	primary key(id,name)
+	);
+	insert into user2 values(1,'张三','123');
+	
+	insert into user2 values(2,'张三','123'); --此条也可增加，联合主键只需一条满足即可相当于‘或’但是只要有NULL存在就无法创建。
+	
+				</pre>
+				<h3>自增约束(auto_increment)</h3>
+				<pre>
+	CREATE TABLE user3(
+		id int primary key auto_increment,
+		name varchar(20)
+	);
+	insert into user3(name)values('张三');
+	select * from user3; --可见id自动添加；
+	+------+-----+
+	| id | name  |
+	+------+-----+
+	| 1  | 张三  |
+	+------+-----+
+				</pre>
+				<h3>建表后增加与删除主键</h3>
+				<pre>
+	CREATE TABLE user4(
+		id int,
+		name varchar(20)
+	);
+	增加：
+		alter table user4 add primary key(id);
+		或者
+		alter table modify id int primary key;
+	使用describe查看表中id的key列：
+		describe user4;
+		+-------+-------------+------+-----+---------+-------+
+		| Field | Type        | Null | Key | Default | Extra |
+		+-------+-------------+------+-----+---------+-------+
+		| id    | int(11)     | NO   | PRI | NULL    |       |
+		| name  | varchar(20) | YES  |     | NULL    |       |
+		+-------+-------------+------+-----+---------+-------+
+	删除：
+	alter table user4 drop primary key;
+	describe user4;
+	+-------+-------------+------+-----+---------+-------+
+	| Field | Type        | Null | Key | Default | Extra |
+	+-------+-------------+------+-----+---------+-------+
+	| id    | int(11)     | NO   |     | NULL    |       |
+	| name  | varchar(20) | YES  |     | NULL    |       |
+	+-------+-------------+------+-----+---------+-------+
+				</pre>
+				<h3>二、唯一约束（unique）</h3>
+				<p>约束修饰字段的值不可以重复。(使用语法与主键类似)</p>
+				<pre>
+	CREATE TABLE user5(
+	id int,
+	name varchar(20),
+	unique(name)
+	);
+	
+	删除：
+	alter table user5 drop index name;
+				</pre>
+				<h3>三、非空约束（not null）</h3>
+				<p>修饰字段不能为空。</p>
+				<h3>四、默认约束（default）</h3>
+				<p>当我们插入字段的时候，如果没有传值，就会使用默认值。</p>
+				<pre>
+	CREATE TABLE user6(
+	id int,
+	name varchar(20),
+	age int default 10
+	);
+	insert into user6(id,name) values(1,'张三')；
+	select *from user6;                        
+		+------+--------+------+
+		| id   | name   | age  |
+		+------+--------+------+
+		|    1 | 张三   |   10 |
+		+------+--------+------+
+				</pre>
+				<h3>外键约束foreign key...references...）</h3>
+				<p>涉及到两个表：父表，子表（主表，副表）</p>
+				<pre>
+	CREATE TABLE classes(
+	id int primary key,
+	name varchar(20)
+	);
+	CREATE TABLE students(
+		id int primary key,
+		name varchar(20),
+		class_id int,
+		foreign key(class_id) references classes(id)
+	); 
+	insert into classes values(1,'一班');
+	insert into classes values(2,'二班');
+	insert into classes values(3,'三班');
+	
+	insert into students values(3001,'张三',3);
+	insert into students values(2002,'李四',2);
+	insert into students values(1001,'小红',1);
+
+使用内连接inner join查看表格：
+	select * from students inner join classes on students.class_id=classes.id;
+		+------+--------+----------+----+--------+
+		| id   | name   | class_id | id | name   |
+		+------+--------+----------+----+--------+
+		| 1001 | 小红   |        1 |  1 | 一班   |
+		| 2002 | 李四   |        2 |  2 | 二班   |
+		| 3001 | 张三   |        3 |  3 | 三班   |
+		+------+--------+----------+----+--------+
+		3 rows in set (0.00 sec)			
+				</pre>
+			</div>
+			<div class="next">
+				<a href="b.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="d.html">下一章节</a>
+			</div>
+		</div>
+		<div id="fix" title="回到顶部" onclick='goTop()' style="display: none;">
+			<img src="../img/top.png">
+		</div>
+	</body>
+</html>

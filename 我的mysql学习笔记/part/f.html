@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>MySQL学习笔记</title>
+		<link rel="stylesheet" type="text/css" href="../css/basic.css"/>
+		<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="aside">
+			<div id="nav_list">
+				<ul>
+					<li><a href='../mysql.html' target="_top">MySQL简介</a></li>
+					<li><a href='a.html' target="_top">MySQL基本操作</a></li>
+					<li><a href='b.html' target="_top">MySQL常用数据类型</a></li>
+					<li><a href='c.html' target="_top">MySQL键值约束</a></li>
+					<li><a href='d.html' target="_top">MySQL数据表设计</a></li>
+					<li><a href='e.html' target="_top">SQL查询练习</a></li>
+					<li class='on'><a href='f.html' target="_top">SQL的四种连接查询</a></li>
+					<li><a href='g.html' target="_top">事务</a></li>	
+				</ul>
+			</div>
+		</div>
+		<div id="main">
+			<div class="next">
+				<a href="d.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="g.html">下一章节</a>
+			</div>
+			<div id="section">
+				<h2>SQL的四种连接查询</h2>
+				<p>	1、内连接：inner join 或者 join <br>
+					2、外连接： <br>
+						左连接：left join 或者 left outer join <br>
+						右连接：right join 或者 right outer join <br>
+						完全外连接：full join 或者 full outer join
+				</p>
+				<pre>
+示例：
+	CREATE TABLE card(
+		id int,
+		name varchar(20)
+	);
+	CREATE TABLE person(
+		id int,
+		name varchar(20),
+		cardId int
+	);
+
+	insert into card values(1,'饭卡');
+	insert into card values(2,'建行卡');
+	insert into card values(3,'农行卡');
+	insert into card values(4,'工商卡');
+	insert into card values(5,'邮政卡');
+
+	insert into person values(1,'张三',1);
+	insert into person values(2,'李四',2);
+	insert into person values(3,'王五',6);
+
+	(1)inner join查询(内连接):
+	select * from person inner join card on person.cardId=card.id;
+	内联查询，其实就是两张表中的数控，通过某个字段相对，查询出相关记录的数据。
+	+------+--------+--------+------+-----------+
+	| id   | name   | cardId | id   | name      |
+	+------+--------+--------+------+-----------+
+	|    1 | 张三   |      1 |    1 | 饭卡      |
+	|    2 | 李四   |      2 |    2 | 建行卡    |
+	+------+--------+--------+------+-----------+
+
+	(2)left join(左外连接，right join与其相反)：
+	select * from person left join card on person.cardId=card.id;
+	左外连接，会把左边表里面的所有数据取出来，而右边表中的数据，如果有相等的就显示出来
+	如果没有，就会补NULL。
+	+------+--------+--------+------+-----------+
+	| id   | name   | cardId | id   | name      |
+	+------+--------+--------+------+-----------+
+	|    1 | 张三   |      1 |    1 | 饭卡      |
+	|    2 | 李四   |      2 |    2 | 建行卡    |
+	|    3 | 王五   |      6 | NULL | NULL      |
+	+------+--------+--------+------+-----------+
+	mysql不支持full join：
+	全连接相当于左连接与右连接通过union
+	select * from person left join card on person.cardId=card.id
+	union
+	select * from person right join card on person.cardId=card.id;
+	+------+--------+--------+------+-----------+
+	| id   | name   | cardId | id   | name      |
+	+------+--------+--------+------+-----------+
+	|    1 | 张三   |      1 |    1 | 饭卡      |
+	|    2 | 李四   |      2 |    2 | 建行卡    |
+	|    3 | 王五   |      6 | NULL | NULL      |
+	| NULL | NULL   |   NULL |    3 | 农行卡    |
+	| NULL | NULL   |   NULL |    4 | 工商卡    |
+	| NULL | NULL   |   NULL |    5 | 邮政卡    |
+	+------+--------+--------+------+-----------+
+				</pre>
+			</div>
+			<div class="next">
+				<a href="d.html">上一章节</a>
+				&nbsp &nbsp &nbsp
+				<a href="g.html">下一章节</a>
+			</div>
+		</div>
+		<div id="fix" title="回到顶部" onclick='goTop()' style="display: none;">
+			<img src="../img/top.png">
+		</div>
+	</body>
+</html>
